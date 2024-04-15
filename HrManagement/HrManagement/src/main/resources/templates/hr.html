@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js">
+</script>
+
+<body>
+   <h1>Hr Page</h1>
+    <div id="response"></div>
+    <div class="response" id="request"></div>
+</body>
+<script>
+    const stompClient = new StompJs.Client({
+        brokerURL: 'ws://localhost:9091/myApp'
+    });
+
+    stompClient.onConnect = (connection) => {
+        console.log(connection);
+        stompClient.subscribe('/topic/leaveRequest', (request) => {
+            let listofdata = JSON.parse(request.body)
+            let str = ``
+
+            listofdata.forEach(data => {
+                str += `
+            <div>
+                   <p>Leave Request ID: ${data.id}</p>
+                 <p>Employee Name : ${data.name}</p>
+                 <button onclick="approve('${data.id}', '${data.name}')">Approve</button>
+                <button onclick="reject(${data.id}, '${data.name}')">Reject</button>
+            </div>
+            `;
+                document.getElementById("request").innerHTML = str;
+
+            });
+        });
+
+    };
+
+    window.onload=()=>{
+        stompClient.activate();
+    }
+    function approve(id, name) {
+        let request={
+            id:id,
+            name:name,
+            status:"Approve"
+
+        }
+        stompClient.publish({
+            destination: `/app/approveLeaveRequest/${id}`,
+            body: JSON.stringify(request)
+        });
+    }
+
+
+    function reject(id, name) {
+        let request={
+            id:id,
+            name:name,
+            status:"reject"
+        }
+        stompClient.publish({
+            destination: `/app/approveLeaveRequest/${id}`,
+            body: JSON.stringify(request)
+        });
+    }
+
+</script>
+
+</html>

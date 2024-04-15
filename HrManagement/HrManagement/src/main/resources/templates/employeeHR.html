@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+
+        .inputDiv {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 60px;
+            background-color: #ffffff;
+        }
+
+        #leaveResult {
+            margin-top: 20px;
+            margin-right: 60px;
+            margin-bottom: 20px;
+            margin-left: 60px;
+            background-color: rgba(239, 248, 229, 0.01);
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+    </style>
+
+
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
+
+</head>
+
+<body>
+
+<h1>Employee Form</h1>
+
+<form class="inputDiv" id="inputDiv">
+    <input class="form-control" type="text" id="emp-id" placeholder="Enter Id"><br><br>
+    <input class="form-control" type="text" id="emp-name" placeholder="Enter name">
+    <button class="btn btn-dark" type="submit" id="send-btn">Send</button>
+</form>
+<div id="leaveResult">
+</div>
+
+<script>
+    const stompClient = new StompJs.Client({
+        brokerURL: 'ws://localhost:9091/myApp'
+    });
+    stompClient.onConnect = () => {
+
+    };
+    function changeConnection(id = ""){
+        stompClient.subscribe(`/topic/result/${id}`, (result) => {
+            let data = JSON.parse(result.body)
+            document.getElementById("leaveResult").innerHTML = `Id:${data.id} <br/> Name:${data.name} <br/> Status ${data.status}`       ;
+        });
+    }
+
+    window.onload=()=>{
+        stompClient.activate();
+        document.getElementById("inputDiv").onsubmit=(e)=>{
+            e.preventDefault();
+            let id=document.getElementById("emp-id").value;
+            let name = document.getElementById("emp-name").value;
+            let status = "pending";
+            let request={
+                id:id,
+                name:name,
+                status:status
+            }
+            stompClient.publish({
+                destination: "/app/sendLeaveRequest",
+                body: JSON.stringify(request)
+            });
+            changeConnection(id);
+            document.getElementById("leaveResult").innerHTML = `Id:${request.id} <br/> Name:${request.name} <br/> Status ${request.status}`       ;
+
+        }
+    }
+
+
+</script>
+
+</body>
+
+
+</html>
