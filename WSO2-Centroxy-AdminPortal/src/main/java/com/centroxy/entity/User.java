@@ -1,14 +1,16 @@
 package com.centroxy.entity;
 
 
-import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
+
 
 @Entity
-@Table(name = "users")
+@Table(name = "employee")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,6 +27,10 @@ public class User {
     private String email;
     private String mobile;
     private String password;
+
+
+
+
 
     @Enumerated(EnumType.STRING)
     private Role role;
