@@ -1,0 +1,46 @@
+
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .form-container {
+            max-width: 500px;
+            margin: auto;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-container form {
+            margin-top: 20px;
+        }
+        .error-message {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<h1>Welcome to Admin Dashboard</h1>
+
+<div class="mt-4 text-center">
+    <a href="/admin/adminbyuser" class="btn btn-success">Add User</a>
+    <a href="/groups/add" class="btn btn-info">Add Group</a>
+    <a href="/logout" class="btn btn-danger">Logout</a>
+</div>
+
+</body>
+</html>
